@@ -14,13 +14,9 @@ class _RegistrationState extends State<Registration> {
   var num = TextEditingController();
 
   var gender = "";
-  List<Map<String,dynamic>> values = [
-   
-   
-      
-    
-  ];
-  String? dropdownvalue = 'malappuram';
+  var list = [];
+
+  var dropdownvalue = 'malappuram';
   var district = [
     "malappuram",
     "kozhikode",
@@ -105,8 +101,16 @@ class _RegistrationState extends State<Registration> {
               )
             ],
           ),
+          Row(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(left: 10, top: 20),
+                child: Text('Gender :'),
+              ),
+            ],
+          ),
           Padding(
-            padding: const EdgeInsets.only(left: 55, top: 20),
+            padding: const EdgeInsets.only(left: 60),
             child: RadioListTile(
                 value: 'Male',
                 title: Text('Male'),
@@ -118,7 +122,7 @@ class _RegistrationState extends State<Registration> {
                 }),
           ),
           Padding(
-            padding: const EdgeInsets.only(left: 55),
+            padding: const EdgeInsets.only(left: 60),
             child: RadioListTile(
                 value: 'Female',
                 title: Text('Female'),
@@ -130,7 +134,7 @@ class _RegistrationState extends State<Registration> {
                 }),
           ),
           Padding(
-            padding: const EdgeInsets.only(left: 55),
+            padding: const EdgeInsets.only(left: 60),
             child: RadioListTile(
                 value: 'Others',
                 title: Text('Others'),
@@ -141,24 +145,32 @@ class _RegistrationState extends State<Registration> {
                   });
                 }),
           ),
-          Padding(
-            padding: const EdgeInsets.only(left: 55),
-            child: SizedBox(
-              height: 50,
-              width: 200,
-              child: DropdownButton(
-                  value: dropdownvalue,
-                  icon: Icon(Icons.keyboard_arrow_down),
-                  items: district.map((String district) {
-                    return DropdownMenuItem(
-                        value: district, child: Text(district));
-                  }).toList(),
-                  onChanged: (String? newvalue) {
-                    setState(() {
-                      dropdownvalue = newvalue;
-                    });
-                  }),
-            ),
+          Row(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(left: 10),
+                child: Text('District : '),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 20),
+                child: SizedBox(
+                  height: 50,
+                  width: 200,
+                  child: DropdownButton(
+                      value: dropdownvalue,
+                      icon: Icon(Icons.keyboard_arrow_down),
+                      items: district.map((String value1) {
+                        return DropdownMenuItem(
+                            value: value1, child: Text(value1));
+                      }).toList(),
+                      onChanged: (String? newvalue) {
+                        setState(() {
+                          dropdownvalue = newvalue!;
+                        });
+                      }),
+                ),
+              ),
+            ],
           ),
           Padding(
             padding: const EdgeInsets.only(top: 50),
@@ -171,27 +183,30 @@ class _RegistrationState extends State<Registration> {
                         name.clear();
                         email.clear();
                         num.clear();
+                        gender = ' ';
+                        dropdownvalue = '';
                       });
                     },
                     child: Text('Cancel')),
                 ElevatedButton(
                     onPressed: () {
                       setState(() {
-                       
-                      });
-                    },
-                    child: Text('Submit')),
-                ElevatedButton(
-                    onPressed: () {
-                      setState(() {
+                        list.add({
+                          'name': name.text,
+                          'email': email.text,
+                          'Number': num.text,
+                          'gender': gender,
+                          'district': dropdownvalue
+                        });
+                        print(list);
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => Details(),
+                              builder: (context) => Details(users: list),
                             ));
                       });
                     },
-                    child: Text('Next'))
+                    child: Text('Submit')),
               ],
             ),
           )
